@@ -1,17 +1,16 @@
 
-require 'async/mysql/connection'
+require 'async/mysql/client'
 
-RSpec.describe Async::MySQL::Connection do
+RSpec.describe Async::MySQL::Client do
 	include_context Async::RSpec::Reactor
 	
-	let(:connection_string) {"host=localhost dbname=test"}
-	let(:connection) {Async::MySQL::Connection.new(connection_string)}
+	let(:connection) {Async::MySQL::Client.new(host: 'localhost', database: 'test')}
 	
 	it "should execute query" do
 		reactor.async do
-			results = connection.async_exec("SELECT 42 AS LIFE")
+			results = connection.query("SELECT 42 AS LIFE")
 		
-			expect(results.each.to_a).to be == [{"life" => "42"}]
+			expect(results.each.to_a).to be == [{"LIFE" => 42}]
 			
 			connection.close
 		end

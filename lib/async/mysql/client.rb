@@ -28,7 +28,7 @@ module Async
 			def initialize(config, reactor = nil)
 				@client = ::Mysql2::Client.new(config)
 				
-				super(@client.socket, reactor)
+				super(IO.for_fd(@client.socket), reactor)
 			end
 			
 			def query(sql, **options)

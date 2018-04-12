@@ -4,7 +4,7 @@ require 'active_record'
 class Book < ActiveRecord::Base
 end
 
-RSpec.describe ActiveRecord::Connection do
+RSpec.describe ActiveRecord do
 	include_context Async::RSpec::Reactor
 	
 	it "should work using async adapter" do
