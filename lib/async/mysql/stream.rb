@@ -18,38 +18,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'async/wrapper'
-require_relative 'stream'
-
-require 'mysql2'
-
 module Async
 	module MySQL
-		class Client < Wrapper
-			def initialize(config, reactor = nil)
-				@client = ::Mysql2::Client.new(config)
-				
-				super(::IO.for_fd(@client.socket), reactor)
+		class Stream
+			def initialize(client, result)
+				@client = client
+				@result = result
 			end
 			
-			def query(sql, **options)
-				@client.query(sql, async: true, **options)
-				
-				wait_readable
-				
-				if options[:stream]
-					return Stream.new(self, @client.async_result)
-				else
-					return @client.async_result
+			def each(&block)
+				@result.each do |fields|
+					yield fields
+					
+					# @client.wait_readable
 				end
 			end
 			
 			def respond_to?(*args)
-				@client.respond_to?(*args)
+				@result.respond_to?(*args)
 			end
 			
 			def method_missing(*args)
-				@client.send(*args)
+				@result.send(*args)
 			end
 		end
 	end
