@@ -19,10 +19,11 @@ RSpec.describe Async::MySQL::Client do
 	it "can stream results" do
 		results = connection.query("SELECT * FROM seq_1_to_3", stream: true)
 		
+		rows = [{"seq" => 1}, {"seq" => 2}, {"seq" => 3}].each
+		
 		results.each do |fields|
-			pp fields
+			expect(fields).to be == rows.next
 		end
-		# expect(.to_a).to be == [{"seq" => 1}, {"seq" => 2}, {"seq" => 3}]
 		
 		connection.close
 	end
