@@ -1,6 +1,6 @@
 # Async::MySQL
 
-This is an experimental drop in wrapper to make MySQL work asynchronously, including an ActiveRecord connection adapter.
+**This gem is experimental and unmaintained. Please see https://github.com/socketry/db-mariadb for an event driven driver for MariaDB/MySQL.**
 
 ## Motivation
 
